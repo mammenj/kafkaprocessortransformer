@@ -1,0 +1,40 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+.vscode/launch.json
+target/kafka-streams-global-table-0.0.1-SNAPSHOT.jar.original
+target/*
+target/maven-archiver/pom.properties
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+target/surefire-reports/kafka.streams.globalktable.join.KafkaStreamsGlobalKTableTests.txt
+target/surefire-reports/TEST-kafka.streams.globalktable.join.KafkaStreamsGlobalKTableTests.xml
+target/classes/application.yml
+.sts4-cache/classpath-data.json
+target/classes/application.yml
+.classpath
+.settings/org.eclipse.jdt.core.prefs
+.vscode/settings.json
+.settings/org.eclipse.jdt.core.prefs

@@ -1,0 +1,23 @@
+== What is this app?
+
+This is a Spring Cloud Stream processor using Kafka Streams support for Processor and Transformer integration with Functional Programming
+Please feel free to pull or file any issues if interested.
+
+=== Running the app:
+    1. Start Kafka and Zookeepr
+
+    'cd #kafka_installed_home'
+    'start bin\windows\zookeeper-server-start.bat config\zookeeper.properties'
+    'start bin\windows\kafka-server-start.bat config\server.properties'
+
+    2. Build the Spring boot application
+    
+    'mvn clean package -DskipTests'
+
+    3. Run the Spring boot application
+    
+    'cd $PROJECT_HOME'
+    'java -jar target/processor-transformer-1.0.0-debug.jar'
+    
+
+

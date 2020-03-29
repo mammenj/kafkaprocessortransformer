@@ -1,0 +1,65 @@
+spring:
+  application:
+    name: processor-transformer-sample
+  cloud:
+    stream:
+      bindings:
+        processortest-in-0:
+          destination: jm-processor-input-topic
+
+        transformertest-in-0:
+          destination: jm-processor-input-topic
+        transformertest-out-0:
+          destination: jm-transfomed-output-topic
+
+        inputwords-in-0:
+          destination: jm-word-input-topic
+          consumer:
+            startOffset: latest
+        inputwords-out-0:
+          destination: jm-processor-input-topic
+        
+      function:
+        definition: inputwords;transformertest
+        # inputwords
+        #; processortest
+        #; transformertest
+
+      kafka:
+        streams:
+          binder:
+            serdeError: logAndContinue
+            state-store-retry:
+              max-attempts: 1
+            functions:
+              inputwords:
+                applicationId: myprocessor-inputwords
+                configuration:
+                  startOffset: latest
+              processortest:
+                applicationId: myprocessor-processor
+              transformertest:
+                applicationId: mytransformer-transformer
+
+            configuration:
+              auto.offset.reset: latest
+            # configuration:
+              default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              
+          bindings:
+            processortest-in-0:
+              consumer:
+                materializedAs: jm.mystate
+                
+            #spring.cloud.stream.kafka.streams.bindings.<binding-name>.consumer
+            inputwords-in-0:
+              consumer:
+                startOffset: latest
+
+            transformertest-in-0:
+              consumer:
+                materializedAs: jm.mystate
+            
+server:
+  port: 8081
