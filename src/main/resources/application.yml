@@ -29,22 +29,33 @@ spring:
             functions:
               inputwords:
                 applicationId: myprocessor-inputwords
+                configuration:
+                  auto.offset.reset: latest
+                  isolation.level: read_committed
+                  default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                  default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
 
 
               processortest:
                 applicationId: myprocessor-processor
-
+                configuration:
+                  auto.offset.reset: latest
+                  isolation.level: read_committed
+                  default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                  default.value.serde: org.apache.kafka.common.serialization.Serdes$LongSerde
 
               transformertest:
                 applicationId: mytransformer-transformer
+                configuration:
+                  auto.offset.reset: latest
+                  isolation.level: read_committed
+                  default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                  default.value.serde: org.apache.kafka.common.serialization.Serdes$LongSerde
 
 
             configuration:
               auto.offset.reset: latest
               isolation.level: read_committed
-            # configuration:
-              default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-              default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
               
             
 server:
