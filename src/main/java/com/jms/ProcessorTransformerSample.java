@@ -15,14 +15,15 @@ import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.apache.kafka.streams.state.Stores;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class ProcessorTransformerSample {
-    // private final static Logger logger =
-    // LoggerFactory.getLogger(WeeklyProcess.class);
+    private final static Logger logger = LoggerFactory.getLogger(ProcessorTransformerSample.class);
 
     public static void main(final String[] args) {
         SpringApplication.run(ProcessorTransformerSample.class, args);
@@ -56,53 +57,45 @@ public class ProcessorTransformerSample {
 
                 @Override
                 public void init(ProcessorContext context) {
-                    System.out.println("#############processortest: init>>>>>>>>>>>>>>>>>>>");
+                    logger.info("#############processortest: init>>>>>>>>>>>>>>>>>>>");
                     if (state == null) {
-                        System.out.println("#############processortest: get state its nulll>>>>>>>>>>>>>>>>>>>");
+                        System.out.println("");
+                        logger.info("#############processortest: get state its nulll>>>>>>>>>>>>>>>>>>>");
                         state = (KeyValueStore<String, Long>) context.getStateStore("mystate");
 
                     } else {
-
-                        System.out.println("#############processortest: init.state NOT NULL");
+                        logger.info("#############processortest: init.state NOT NULL");
                     }
                 }
 
                 @Override
                 public void process(String key, Long value) {
-                    System.out.println("#############processortest: process>>>>>>>>>>>>>>>>>>> key:: " + key
-                            + " value:: " + value);
+                    logger.info("#############processortest: process>>>>>>>>>>>>>>>>>>> key:: " + key + " value:: "
+                            + value);
                     if (state != null) {
-
                         if (key != null) {
                             Long currentCount = state.get(key);
-
                             if (currentCount == null) {
                                 // state.put(key, value);
                                 state.put(key, value);
-                                System.out.println("#############processortest:No value found for key : " + key);
+                                logger.info("#############processortest:No value found for key : " + key);
                             } else {
                                 // state.put(key, currentCount + value);
                                 state.put(key, value);
-                                System.out.println(
-                                        "#############processortest: process>>>>>>>>> current value:: for key: " + key
-                                                + " :" + currentCount);
+                                logger.info("#############processortest: process>>>>>>>>> current value:: for key: "
+                                        + key + " :" + currentCount);
                             }
-
-                            System.out
-                                    .println("#############processortest: process>>>>>>>>>>> updated value:: for key: "
-                                            + key + " : " + state.get(key));
+                            logger.info("#############processortest: process>>>>>>>>>>> updated value:: for key: " + key
+                                    + " : " + state.get(key));
                         } else
-                            System.out.println("NULL KEY :(((((((((((((((())))))))))))))))");
-
+                            logger.info("NULL KEY :(((((((((((((((())))))))))))))))");
                     } else
-                        System.out.println("NULL STATE :(((((((((((((((())))))))))))))))");
-
-                    // business logic
+                        logger.info("NULL STATE :(((((((((((((((())))))))))))))))");
                 }
 
                 @Override
                 public void close() {
-                    System.out.println("@@@@@@@@@@@@@@@@@processortest: close>>>>>>>>>>>>>>>>>>>>>>>>>");
+                    logger.info("@@@@@@@@@@@@@@@@@processortest: close>>>>>>>>>>>>>>>>>>>>>>>>>");
                     if (state != null) {
                         state.close();
                     }
@@ -118,19 +111,17 @@ public class ProcessorTransformerSample {
 
                 @Override
                 public void init(ProcessorContext context) {
-                    System.out.println("############# transformertest: init ******************");
+                    logger.info("############# transformertest: init ******************");
                     if (state == null) {
                         state = (KeyValueStore<String, Long>) context.getStateStore("mystate");
                     }
-
                 }
 
                 @Override
                 public void close() {
-                    System.out.println("transformertest: close *************");
+                    logger.info("transformertest: close *************");
                     if (state != null) {
                         state.close();
-
                     }
                 }
 
@@ -138,40 +129,32 @@ public class ProcessorTransformerSample {
                 public KeyValue<String, Long> transform(String key, Long value) {
                     // business logic - return transformed KStream;
                     KeyValue<String, Long> kv = null;
-
-                    System.out.println("#############transformertest: transform >>>>>>>>>>>>>>>>>>> key:: " + key
-                            + " value:: " + value);
+                    logger.info("#############transformertest: transform >>>>>>>>>>>>>>>>>>> key:: " + key + " value:: "
+                            + value);
                     if (state != null) {
 
                         if (key != null) {
                             Long currentCount = state.get(key);
-
                             if (currentCount == null) {
                                 state.put(key, value);
-                                System.out.println(
-                                        "#############transformertest:transform   No value found for key : " + key);
+                                logger.info("#############transformertest:transform   No value found for key : " + key);
                                 kv = new KeyValue<String, Long>(key, value);
                             } else {
                                 // state.put(key, currentCount + value);
                                 state.put(key, value);
                                 kv = new KeyValue<String, Long>(key, currentCount + value);
-                                System.out.println(
+                                logger.info(
                                         "#############transformertest: transform >>>>>>>>> current value:: for key: "
                                                 + key + " :" + currentCount);
                             }
-
-                            System.out.println(
-                                    "#############transformertest: transform >>>>>>>>>>> updated value:: for key: "
-                                            + key + " : " + state.get(key));
+                            logger.info("#############transformertest: transform >>>>>>>>>>> updated value:: for key: "
+                                    + key + " : " + state.get(key));
                         } else
-                            System.out.println("NULL KEY :(((((((((((((((())))))))))))))))");
-
+                            logger.info("NULL KEY :(((((((((((((((())))))))))))))))");
                     } else
-                        System.out.println("NULL STATE :(((((((((((((((())))))))))))))))");
-
+                        logger.info("NULL STATE :(((((((((((((((())))))))))))))))");
                     return kv;
                 }
-
             }, "mystate");
 
         }
